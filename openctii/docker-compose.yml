@@ -170,7 +170,7 @@ services:
     restart: always
     depends_on:
       - opencti
-   connector-alienvault:
+  connector-alienvault:
     image: opencti/connector-alienvault:6.0.0
     environment:
       - OPENCTI_URL=http://opencti:8080
