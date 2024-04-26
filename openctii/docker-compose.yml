@@ -7,7 +7,7 @@ services:
     restart: always
   networks:
       opencti-net:
-        ipv4_address: 172.17.0.4 
+        ipv4_address: 10.0.0.4 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
     volumes:
@@ -24,7 +24,7 @@ services:
       - "ES_JAVA_OPTS=-Xms${ELASTIC_MEMORY_SIZE} -Xmx${ELASTIC_MEMORY_SIZE}"
     networks:
       opencti-net:
-        ipv4_address: 172.17.0.3
+        ipv4_address: 10.0.0.3
      
     ulimits:
       memlock:
@@ -47,7 +47,7 @@ services:
     restart: always
     networks:
       opencti-net:
-        ipv4_address: 172.17.0.5
+        ipv4_address: 10.0.0.5
   rabbitmq:
     image: rabbitmq:3.12-management
     environment:
@@ -59,7 +59,7 @@ services:
     restart: always
     networks:
       opencti-net:
-        ipv4_address: 172.17.0.6 
+        ipv4_address: 10.0.0.6 
   opencti:
     image: opencti/platform:6.0.0-fips
     environment:
@@ -67,8 +67,8 @@ services:
       - https_proxy=http://172.22.200.200:8080/
       - HTTP_PROXY=http://172.22.200.200:8080/
       - HTTPS_PROXY=http://172.22.200.200:8080/
-      - no_proxy=localhost,::1,172.0.0.1/8,127.0.0.1/8,172.17.0.2
-      - NO_PROXY=localhost,::1,172.0.0.1/8,127.0.0.1/8,172.17.0.2
+      - no_proxy=localhost,::1,172.0.0.1/8,127.0.0.1/8,10.0.0.2
+      - NO_PROXY=localhost,::1,172.0.0.1/8,127.0.0.1/8,10.0.0.2
       - NODE_OPTIONS=--max-old-space-size=8096
       - APP__PORT=8080
       - APP__BASE_URL=${OPENCTI_BASE_URL}
@@ -97,7 +97,7 @@ services:
       - "35000:30020"
     networks:
       opencti-net:
-        ipv4_address: 172.17.0.2
+        ipv4_address: 10.0.0.2
     depends_on:
       - redis
       - elasticsearch
@@ -132,7 +132,7 @@ services:
       - opencti
     networks:
       opencti-net:
-        ipv4_address: 172.17.0.7
+        ipv4_address: 10.0.0.7
   connector-export-file-csv:
     image: opencti/connector-export-file-csv:6.0.0
     environment:
@@ -149,7 +149,7 @@ services:
       - opencti
     networks:
       opencti-net:
-        ipv4_address: 172.17.0.8
+        ipv4_address: 10.0.0.8
   connector-export-file-txt:
     image: opencti/connector-export-file-txt:6.0.0
     environment:
@@ -166,7 +166,7 @@ services:
       - opencti
     networks:
       opencti-net:
-        ipv4_address: 172.17.0.9
+        ipv4_address: 10.0.0.9
   connector-import-file-stix:
     image: opencti/connector-import-file-stix:6.0.0
     environment:
@@ -183,7 +183,7 @@ services:
     restart: always
     networks:
       opencti-net:
-        ipv4_address: 172.17.0.10
+        ipv4_address: 10.0.0.10
     depends_on:
       - opencti
   connector-import-document:
@@ -206,7 +206,7 @@ services:
       - opencti
     networks:
       opencti-net:
-        ipv4_address: 172.17.0.11
+        ipv4_address: 10.0.0.11
   connector-alienvault:
     image: opencti/connector-alienvault:6.0.0
     environment:
@@ -214,8 +214,8 @@ services:
       - https_proxy=http://172.22.200.200:8080/
       - HTTP_PROXY=http://172.22.200.200:8080/
       - HTTPS_PROXY=http://172.22.200.200:8080/
-      - no_proxy=localhost,::1,172.0.0.1/8,127.0.0.1/8,172.17.0.2
-      - NO_PROXY=localhost,::1,172.0.0.1/8,127.0.0.1/8,172.17.0.2
+      - no_proxy=localhost,::1,172.0.0.1/8,127.0.0.1/8,10.0.0.2
+      - NO_PROXY=localhost,::1,172.0.0.1/8,127.0.0.1/8,10.0.0.2
       - OPENCTI_URL=http://opencti:30020
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
       - CONNECTOR_ID=6ed68f19-7c8f-48fa-b50f-d598c7fb42ad
@@ -244,7 +244,7 @@ services:
     restart: always
     networks:
       opencti-net:
-        ipv4_address: 172.17.0.12
+        ipv4_address: 10.0.0.12
   connector-mitre:
     image: opencti/connector-mitre:6.0.2
     environment:
@@ -252,8 +252,8 @@ services:
       - https_proxy=http://172.22.200.200:8080/
       - HTTP_PROXY=http://172.22.200.200:8080/
       - HTTPS_PROXY=http://172.22.200.200:8080/
-      - no_proxy=localhost,::1,172.0.0.1/8,127.0.0.1/8,172.17.0.2
-      - NO_PROXY=localhost,::1,172.0.0.1/8,127.0.0.1/8,172.17.0.2
+      - no_proxy=localhost,::1,172.0.0.1/8,127.0.0.1/8,10.0.0.2
+      - NO_PROXY=localhost,::1,172.0.0.1/8,127.0.0.1/8,10.0.0.2
       - OPENCTI_URL=http://opencti:30020
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
       - CONNECTOR_ID=f30e7357-e521-46d7-90a1-8817dfd841dc
@@ -268,7 +268,7 @@ services:
     restart: always
     networks:
       opencti-net:
-        ipv4_address: 172.17.0.13
+        ipv4_address: 10.0.0.13
 volumes:
   esdata:
   s3data:
@@ -279,5 +279,5 @@ networks:
     driver: bridge
     ipam:
      config:
-       - subnet: 172.17.0.1/27
-         gateway: 172.17.0.1
+       - subnet: 10.0.0.0/27
+         gateway: 10.0.0.1
