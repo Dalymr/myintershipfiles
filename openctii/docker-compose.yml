@@ -4,7 +4,7 @@ services:
     image: redis:7.2.4
     volumes:
       - redisdata:/data
-    restart: always
+    restart: no
   networks:
       opencti-net:
         ipv4_address: 10.0.0.4 
@@ -39,7 +39,7 @@ services:
     volumes:
       - s3data:/data
     ports:
-      - "36000:9000"
+      - "9000:9000"
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}    
@@ -67,8 +67,8 @@ services:
       - https_proxy=http://172.22.200.200:8080/
       - HTTP_PROXY=http://172.22.200.200:8080/
       - HTTPS_PROXY=http://172.22.200.200:8080/
-      - no_proxy=localhost,::1,172.0.0.1/8,127.0.0.1/8,10.0.0.2
-      - NO_PROXY=localhost,::1,172.0.0.1/8,127.0.0.1/8,10.0.0.2
+      - no_proxy=localhost,::1,172.0.0.1/8,127.0.0.1/8,opencti
+      - NO_PROXY=localhost,::1,172.0.0.1/8,127.0.0.1/8,opencti
       - NODE_OPTIONS=--max-old-space-size=8096
       - APP__PORT=8080
       - APP__BASE_URL=${OPENCTI_BASE_URL}
@@ -78,7 +78,7 @@ services:
       - APP__APP_LOGS__LOGS_LEVEL=error
       - REDIS__HOSTNAME=redis
       - REDIS__PORT=6379
-      - ELASTICSEARCH__URL=http://elasticsearch:9200
+      - ELASTICSEARCH__URL=http://10.0.0.3:9200
       - MINIO__ENDPOINT=minio
       - MINIO__PORT=9000
       - MINIO__USE_SSL=false
@@ -97,7 +97,7 @@ services:
       - "35000:30020"
     networks:
       opencti-net:
-        ipv4_address: 10.0.0.2
+        ipv4_address: opencti
     depends_on:
       - redis
       - elasticsearch
@@ -107,7 +107,7 @@ services:
   worker:
     image: opencti/worker:6.0.0
     environment:
-      - OPENCTI_URL=http://10.0.0.2:30020
+      - OPENCTI_URL=http://opencti:30020
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
       - WORKER_LOG_LEVEL=info
     depends_on:
@@ -119,7 +119,7 @@ services:
   connector-export-file-stix:
     image: opencti/connector-export-file-stix:6.0.0
     environment:
-      - OPENCTI_URL=http://10.0.0.2:30020
+      - OPENCTI_URL=http://opencti:30020
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
       - CONNECTOR_ID=${CONNECTOR_EXPORT_FILE_STIX_ID} # Valid UUIDv4
       - CONNECTOR_TYPE=INTERNAL_EXPORT_FILE
@@ -136,7 +136,7 @@ services:
   connector-export-file-csv:
     image: opencti/connector-export-file-csv:6.0.0
     environment:
-      - OPENCTI_URL=http://10.0.0.2:30020
+      - OPENCTI_URL=http://opencti:30020
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
       - CONNECTOR_ID=${CONNECTOR_EXPORT_FILE_CSV_ID} # Valid UUIDv4
       - CONNECTOR_TYPE=INTERNAL_EXPORT_FILE
@@ -153,7 +153,7 @@ services:
   connector-export-file-txt:
     image: opencti/connector-export-file-txt:6.0.0
     environment:
-      - OPENCTI_URL=http://10.0.0.2:30020
+      - OPENCTI_URL=http://opencti:30020
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
       - CONNECTOR_ID=${CONNECTOR_EXPORT_FILE_TXT_ID} # Valid UUIDv4
       - CONNECTOR_TYPE=INTERNAL_EXPORT_FILE
@@ -170,7 +170,7 @@ services:
   connector-import-file-stix:
     image: opencti/connector-import-file-stix:6.0.0
     environment:
-      - OPENCTI_URL=http://10.0.0.2:30020
+      - OPENCTI_URL=http://opencti:30020
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
       - CONNECTOR_ID=${CONNECTOR_IMPORT_FILE_STIX_ID} # Valid UUIDv4
       - CONNECTOR_TYPE=INTERNAL_IMPORT_FILE
@@ -189,7 +189,7 @@ services:
   connector-import-document:
     image: opencti/connector-import-document:6.0.0
     environment:
-      - OPENCTI_URL=http://10.0.0.2:30020
+      - OPENCTI_URL=http://opencti:30020
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
       - CONNECTOR_ID=${CONNECTOR_IMPORT_DOCUMENT_ID} # Valid UUIDv4
       - CONNECTOR_TYPE=INTERNAL_IMPORT_FILE
@@ -214,9 +214,9 @@ services:
       - https_proxy=http://172.22.200.200:8080/
       - HTTP_PROXY=http://172.22.200.200:8080/
       - HTTPS_PROXY=http://172.22.200.200:8080/
-      - no_proxy=localhost,::1,172.0.0.1/8,127.0.0.1/8,10.0.0.2
-      - NO_PROXY=localhost,::1,172.0.0.1/8,127.0.0.1/8,10.0.0.2
-      - OPENCTI_URL=http://10.0.0.2:30020
+      - no_proxy=localhost,::1,172.0.0.1/8,127.0.0.1/8,opencti
+      - NO_PROXY=localhost,::1,172.0.0.1/8,127.0.0.1/8,opencti
+      - OPENCTI_URL=http://opencti:30020
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
       - CONNECTOR_ID=6ed68f19-7c8f-48fa-b50f-d598c7fb42ad
       - CONNECTOR_NAME=AlienVault
@@ -252,9 +252,9 @@ services:
       - https_proxy=http://172.22.200.200:8080/
       - HTTP_PROXY=http://172.22.200.200:8080/
       - HTTPS_PROXY=http://172.22.200.200:8080/
-      - no_proxy=localhost,::1,172.0.0.1/8,127.0.0.1/8,10.0.0.2
-      - NO_PROXY=localhost,::1,172.0.0.1/8,127.0.0.1/8,10.0.0.2
-      - OPENCTI_URL=http://10.0.0.2:30020
+      - no_proxy=localhost,::1,172.0.0.1/8,127.0.0.1/8,opencti
+      - NO_PROXY=localhost,::1,172.0.0.1/8,127.0.0.1/8,opencti
+      - OPENCTI_URL=http://opencti:30020
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
       - CONNECTOR_ID=f30e7357-e521-46d7-90a1-8817dfd841dc
       - "CONNECTOR_NAME=MITRE Datasets"
